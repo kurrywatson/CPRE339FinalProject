@@ -9,7 +9,7 @@ App Flow:
 4. The app will update and let you know what it knows about the game  
 5. This continues until app let's you know when it has solved the puzzle  
 
-Group Information: 
+Group Information:  
 1. Chandler Heisler  
 2. Nick Schneider  
 3. Kurry Watson
