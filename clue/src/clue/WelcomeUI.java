@@ -18,8 +18,6 @@ public class WelcomeUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField numPlayersText;
 	private JTextField numCardsText;
-	private JTextField textField_2;
-	private JTextField textField_3;
 
 	/**
 	 * Launch the application.
@@ -57,41 +55,24 @@ public class WelcomeUI extends JFrame {
 		numPlayersText = new JTextField();
 		numPlayersText.setEditable(false);
 		numPlayersText.setText("6");
-		numPlayersText.setBounds(61, 143, 86, 20);
+		numPlayersText.setBounds(41, 143, 86, 20);
 		contentPane.add(numPlayersText);
 		numPlayersText.setColumns(10);
 		
 		numCardsText = new JTextField();
+		numCardsText.setEditable(false);
 		numCardsText.setText("3");
 		numCardsText.setBounds(288, 143, 86, 20);
 		contentPane.add(numCardsText);
 		numCardsText.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(61, 217, 86, 20);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
-		
-		textField_3 = new JTextField();
-		textField_3.setBounds(288, 217, 86, 20);
-		contentPane.add(textField_3);
-		textField_3.setColumns(10);
-		
 		JLabel lblNewLabel_1 = new JLabel("Number of Players");
-		lblNewLabel_1.setBounds(43, 117, 104, 14);
+		lblNewLabel_1.setBounds(32, 117, 135, 14);
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Numer of Cards Per Person");
-		lblNewLabel_2.setBounds(249, 117, 137, 14);
+		lblNewLabel_2.setBounds(252, 117, 172, 14);
 		contentPane.add(lblNewLabel_2);
-		
-		JLabel lblNewLabel_3 = new JLabel("New label");
-		lblNewLabel_3.setBounds(61, 192, 86, 14);
-		contentPane.add(lblNewLabel_3);
-		
-		JLabel lblNewLabel_4 = new JLabel("New label");
-		lblNewLabel_4.setBounds(300, 192, 46, 14);
-		contentPane.add(lblNewLabel_4);
 		
 		JButton startButton = new JButton("Start!");
 		startButton.addActionListener(new ActionListener() {

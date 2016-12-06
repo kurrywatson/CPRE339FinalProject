@@ -31,10 +31,13 @@ public class MainGameUI extends JFrame {
 	private JTextField proposedText;
 	private JTextField answerText;
 	private static JTextArea gameText;
-	private ArrayList<Player> players;
-	private CardDeck gameDeck;
-	private ArrayList<Integer> solvedCards;
+	private static ArrayList<Player> players;
+	private static CardDeck gameDeck;
+	private static ArrayList<Integer> solvedCards;
 	private boolean solved;
+	private JTextField sawText;
+	private static JPanel altPanel;
+	private JPanel standardPanel;
 
 	/**
 	 * Launch the application.
@@ -74,49 +77,87 @@ public class MainGameUI extends JFrame {
 		scrollPane.setViewportView(gameText);
 		gameText.setBorder(new LineBorder(new Color(0, 0, 0)));
 		
+		standardPanel = new JPanel();
+		standardPanel.setBounds(10, 11, 353, 117);
+		contentPane.add(standardPanel);
+		standardPanel.setLayout(null);
+		
+		JButton btnNewButton = new JButton("Confirm Info");
+		btnNewButton.setBounds(228, 48, 106, 23);
+		standardPanel.add(btnNewButton);
+		
+		JLabel lblNewLabel_1 = new JLabel("Player answered:");
+		lblNewLabel_1.setBounds(0, 81, 162, 14);
+		standardPanel.add(lblNewLabel_1);
+		
+		answerText = new JTextField();
+		answerText.setBounds(111, 78, 86, 20);
+		standardPanel.add(answerText);
+		answerText.setColumns(10);
+		
+		proposedText = new JTextField();
+		proposedText.setBounds(111, 49, 86, 20);
+		standardPanel.add(proposedText);
+		proposedText.setColumns(10);
+		
 		suggestionText = new JTextField();
-		suggestionText.setBounds(160, 30, 86, 20);
-		contentPane.add(suggestionText);
+		suggestionText.setBounds(111, 18, 86, 20);
+		standardPanel.add(suggestionText);
 		suggestionText.setColumns(10);
 		
 		JLabel lblSuggestion = new JLabel("Suggestion:");
-		lblSuggestion.setBounds(10, 33, 62, 14);
-		contentPane.add(lblSuggestion);
+		lblSuggestion.setBounds(0, 22, 123, 14);
+		standardPanel.add(lblSuggestion);
 		
-		proposedText = new JTextField();
-		proposedText.setBounds(160, 61, 86, 20);
-		contentPane.add(proposedText);
-		proposedText.setColumns(10);
+		JLabel lblNewLabel = new JLabel("Player asking:");
+		lblNewLabel.setBounds(0, 52, 170, 14);
+		standardPanel.add(lblNewLabel);
 		
-		answerText = new JTextField();
-		answerText.setBounds(160, 92, 86, 20);
-		contentPane.add(answerText);
-		answerText.setColumns(10);
+		altPanel = new JPanel();
+		altPanel.setBounds(373, 11, 144, 118);
+		contentPane.add(altPanel);
+		altPanel.setLayout(null);
+		altPanel.setVisible(false);
 		
-		JLabel lblNewLabel = new JLabel("Who proposed the suggestion:");
-		lblNewLabel.setBounds(10, 64, 153, 14);
-		contentPane.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("Player answered:");
-		lblNewLabel_1.setBounds(10, 95, 153, 14);
-		contentPane.add(lblNewLabel_1);
-		
-		JButton btnNewButton = new JButton("Confirm Info");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnNewButton_1 = new JButton("Confirm");
+		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				enterSuggestion(players, suggestionText.getText(), Integer.parseInt(proposedText.getText()), Integer.parseInt(answerText.getText()), solvedCards, gameDeck);
-				   updateInformation(players, gameDeck, solvedCards);
-				   displayInformation(players, gameDeck, solvedCards);
-				   if(gameDeck.getDeck().size() == 3 || solvedCards.size() == 3) {
-					   solved = true;
-					   gameText.setText("The cards inside are: " + solvedCards);//("the cards inside are: " + solvedCards);
-				   }
-			   
-			   
+				players.get(Integer.parseInt(answerText.getText())).getConfirmedCards().add(Integer.parseInt(sawText.getText()));
+				updateInformation(players, gameDeck, solvedCards);
+				displayInformation(players, gameDeck, solvedCards);
+				altPanel.setVisible(false);
 			}
 		});
-		btnNewButton.setBounds(256, 60, 112, 23);
-		contentPane.add(btnNewButton);
+		btnNewButton_1.setBounds(25, 84, 104, 23);
+		altPanel.add(btnNewButton_1);
+		
+		JLabel lblWhatCardDid = new JLabel("What card did you see?");
+		lblWhatCardDid.setBounds(0, 0, 134, 34);
+		altPanel.add(lblWhatCardDid);
+		
+		sawText = new JTextField();
+		sawText.setBounds(25, 36, 86, 20);
+		altPanel.add(sawText);
+		sawText.setColumns(10);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!altPanel.isVisible()) {
+					if (verifySuggestion(suggestionText.getText())) {
+						enterSuggestion(players, suggestionText.getText(), Integer.parseInt(proposedText.getText()),
+								Integer.parseInt(answerText.getText()), solvedCards, gameDeck);
+						updateInformation(players, gameDeck, solvedCards);
+						displayInformation(players, gameDeck, solvedCards);
+						if ( solvedCards.size() == 3) {// gameDeck.getDeck().size() == 3 ||
+							solved = true;
+							gameText.setText("Puzzle solved!" + "\n" + "The cards inside are: " + solvedCards);
+						}
+					}
+					else{
+						return;
+					}
+				}
+			}
+		});
 		Game();
 	}
 	
@@ -215,6 +256,51 @@ private static boolean verifySuggestion(String suggestion) {
 	   
 }
 
+	private static void searchSolved() {
+		int personCount = 0;
+		int weponCount = 0;
+		int roomCount = 0;
+
+		for (int i = 0; i < gameDeck.getDeck().size(); i++) {
+			int temp = gameDeck.getDeck().get(i);
+			if (temp >= 1 && temp <= 6) {
+				personCount++;
+			} else if (temp >= 7 && temp <= 12) {
+				weponCount++;
+			} else if (temp >= 13 && temp <= 21) {
+				roomCount++;
+			}
+		}
+		if (personCount == 1) {
+			for (int i = 0; i < gameDeck.getDeck().size(); i++) {
+				int temp = gameDeck.getDeck().get(i);
+				if((temp >= 1 && temp <= 6)){
+					gameDeck.removeCard(temp);
+					solvedCards.add(temp);
+				}
+			}
+		}
+		if (weponCount == 1) {
+			for (int i = 0; i < gameDeck.getDeck().size(); i++) {
+				int temp = gameDeck.getDeck().get(i);
+				if((temp >= 7 && temp <= 12)){
+					gameDeck.removeCard(temp);
+					solvedCards.add(temp);
+				}
+			}
+		}
+		if (roomCount == 1) {
+			for (int i = 0; i < gameDeck.getDeck().size(); i++) {
+				int temp = gameDeck.getDeck().get(i);
+				if((temp >= 13 && temp <= 21)){
+					gameDeck.removeCard(temp);
+					solvedCards.add(temp);
+				}
+			}
+		}
+
+	}
+
 public static void enterSuggestion(ArrayList<Player> players, String suggestion, int playerSuggested, int playerAnswered, ArrayList<Integer> solvedCards, CardDeck gameDeck ) {
 		
 	   // if no one can disprove the suggestion, eliminate it for everyone but the person asking
@@ -281,8 +367,8 @@ public static void enterSuggestion(ArrayList<Player> players, String suggestion,
 		   	if(playerSuggested == 0) {
 //		   		Scanner reader = new Scanner(System.in);
 		   		
-		   		gameText.setText(gameText.getText() + "What card were you shown: " + "\n");
-		   		
+		   		//gameText.setText(gameText.getText() + "What card were you shown: " + "\n");
+		   		altPanel.setVisible(true);
 		   		//int card = reader.nextInt();
 //		   		players.get(playerAnswered).getConfirmedCards().add(card);
 //		   		reader.close();
@@ -331,29 +417,39 @@ public static void updateInformation(ArrayList<Player> players, CardDeck gameDec
 		   player.solveTethers();
 	   }
 	   
-	   //re-eliminate gamedeck cards based on new information
+	   //update game based on new information
 	   for (Player player : players) {
 		   for (Integer confirmedCard : player.getConfirmedCards()) {
 			   gameDeck.removeCard(confirmedCard);
 		   }
 	   }
+	   for (Player player : players) {
+		   player.solveTethers();
+	   }
+	   for (Player player : players) {
+		   for (Integer confirmedCard : player.getConfirmedCards()) {
+			   gameDeck.removeCard(confirmedCard);
+		   }
+	   }
+	   deleteEmptyTethers();
+	   searchSolved();
+	   
+}
+
+private static void deleteEmptyTethers() {
+	for (Player player : players) {
+		player.getCardDeck().getTethers().removeAll(new ArrayList<ArrayList>());
+	}
 }
 
 public static void displayInformation(ArrayList<Player> players, CardDeck gameDeck, ArrayList<Integer> solvedCards) {
        gameText.setText("");
-//	   System.out.println("gamedeck: " + gameDeck.getDeck());
-//	   System.out.println("solvedCards: " + solvedCards);
-//	   for (Player player : players) {
-//		   System.out.println(player.getId() + ": " +  player.getCardDeck().getDeck());
-//		   System.out.println(player.getCardDeck().getTethers());
-//		   System.out.println(player.getConfirmedCards());
-//	   }
-       gameText.setText("gamedeck: " + gameDeck.getDeck() + "\n");
-       gameText.setText(gameText.getText() + "solvedCards: " + solvedCards + "\n");
+       gameText.setText("Unknown Cards: " + gameDeck.getDeck() + "\n");
+       gameText.setText(gameText.getText() + "Solved Cards: " + solvedCards + "\n" + "\n");
 	   for (Player player : players) {
-		   gameText.setText(gameText.getText() + player.getId() + ": " +  player.getCardDeck().getDeck() + "\n");
+		   gameText.setText(gameText.getText() + "Player " + player.getId() + ": " +  player.getCardDeck().getDeck() + "\n");
 		   gameText.setText(gameText.getText() + player.getCardDeck().getTethers() + "\n");
-		   gameText.setText(gameText.getText() + player.getConfirmedCards() + "\n");
+		   gameText.setText(gameText.getText() + player.getConfirmedCards() + "\n" + "\n");
 	   }
 }
 
@@ -364,7 +460,6 @@ public static Player getNextPlayer(ArrayList<Player> players, int currentPlayer)
 		   return players.get(currentPlayer + 1);
 	   }  
 }
-
 }
 
 //	private void Game() {

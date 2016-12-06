@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class CardInput extends JFrame {
 
@@ -41,18 +42,19 @@ public class CardInput extends JFrame {
 	public CardInput(int numPlayers,int numCards) {
 		cards = "";
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 394, 231);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel lblInputTheCards = new JLabel("Input the cards you recived");
-		lblInputTheCards.setBounds(124, 33, 138, 14);
+		lblInputTheCards.setBounds(107, 33, 223, 14);
 		contentPane.add(lblInputTheCards);
 		
 		cardsText = new JTextField();
-		cardsText.setBounds(58, 58, 272, 102);
+		cardsText.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		cardsText.setBounds(58, 58, 272, 31);
 		contentPane.add(cardsText);
 		cardsText.setColumns(10);
 		
@@ -65,7 +67,7 @@ public class CardInput extends JFrame {
 				dispose();
 			}
 		});
-		btnStart.setBounds(136, 195, 89, 23);
+		btnStart.setBounds(138, 127, 89, 23);
 		contentPane.add(btnStart);
 	}
 	public String getCards(){
