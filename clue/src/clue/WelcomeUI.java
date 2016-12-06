@@ -1,6 +1,6 @@
 package clue;
 
-import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -77,11 +77,9 @@ public class WelcomeUI extends JFrame {
 		JButton startButton = new JButton("Start!");
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//will need to be defensive here.
-				setVisible(false); //you can't see me!
+				setVisible(false);
 				CardInput CI = new CardInput(Integer.parseInt(numPlayersText.getText()),Integer.parseInt(numCardsText.getText()));
 				CI.setVisible(true);
-				//setVisible(false); //you can't see me!
 				dispose(); 
 			}
 		});
