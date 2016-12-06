@@ -1,4 +1,4 @@
-One area where we implemented defensive programming was in our UI we only allow users to enter valid information.  We also used defensive programming
+One area where we implemented defensive programming was in our UI we only allow users to enter valid information while entering suggestions.  We also used defensive programming by using encapsulation by only allowing parts of the player class to be accessed through getters and setters.
 
 One area where we corrected bad code smells was how we had a class for each of the 3 categories (person, place, weapon) but there was not enough information stored in each of the classes to justify using them so we just made 1 class.  Another spot where we fixed bad code
 smells was by breaking up the game logic into multiple functions instead of having everything in the same while loop.
