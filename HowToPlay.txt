@@ -1,0 +1,30 @@
+Welcome to Clue Solver! While Clue Solver will help you solve Clue as fast as possible, it does require correctly formatted and accurate input from the user. This is very important!
+
+In order to start playing, start the ClueSolver.jar file.
+
+Welcome Screen:
+1. Here is where you can select amount of players and cards, however they are disabled in our final version as we did not get modes other than 6 players with 3 cards completely implemented.
+2. Click Start to continue
+
+Card Input Screen:
+1. This is the screen where you tell Clue what cards you were dealt
+2. You must enter your cards in the format "#,#,#" (quotes not included). Each card is represented as a number between 1-21 and the map between card and number is given in the cluePhotoGuide.jpg image in this directory.
+
+Main Game Screen:
+1. On this screen you enter suggestions that players are making in the game. Information from these suggestions are used to provide you with the best and most complete game data possible.
+2. The "Suggestion" box requires an input in the format of "#,#,#" (quotes not included). Each card is represented as a number between 1-21 and the map between card and number is given in the cluePhotoGuide.jpg image in this directory.
+3. The "Player asking" box requires an input from 0-5. This number represents which player proposed the suggestion. Player 0 is always the user, player 1 is to player 0's left, player 2 is to player's 1 left, etc. (0 to 5's left).
+4. The "Player answered" box requires an input from 0-5. This number represents which player answered the suggestion. Player 0 is always the user, player 1 is to player 0's left, player 2 is to player's 1 left, etc. (0 to 5's left).
+5. If no player coudl answer the suggestion, enter an input of -1 in the "Player answered" box to indicate this.
+6. When all three boxes contain correct input for a suggestion, press "Confirm Info".
+7. If the user (player 0) asked a suggestion, and received an answer, they will be asked what card they received. The user must enter their input in the "What card did you see" box and then press "Confirm".
+8. The resulting data will be displayed in the textbox below.
+
+How To Read Data:
+1. The "Unknown Cards" line lists all cards who's owner is not currently known
+2. The "Solved" cards list all cards that are certain to be in the envelope
+3. The rest of the data is what each player has. The first line is the cards they still might have. The second line is groups of cards that they have at least one of (we called them tethers). The third line is cards they have definately have.
+
+Playing Until Solved:
+1. Keep entering suggestions as they come until the puzzle is solved.
+2. Once the Clue Solver has solved your puzzle, it will tell you so and display the answer.
