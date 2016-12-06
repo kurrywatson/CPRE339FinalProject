@@ -26,63 +26,6 @@ public class CardDeck {
 		tether.add(room);
 		tethers.add(tether);
 	}
-	
-	
-	/*
-	public void resolveTethers() {
-		
-		for (Tether tether : tethers) {
-			
-
-			
-			//if we have discovered the tether relies on something that isn't there set it to 0
-			if(people.contains(tether.getPerson()) == false && tether.getPerson() != 0) {
-				tether.setPerson(0);
-			}
-			if(weapons.contains(tether.getWeapon()) == false && tether.getWeapon() != 0) {
-				tether.setWeapon(0);
-			}
-			if(rooms.contains(tether.getRoom()) == false && tether.getRoom() != 0) {
-				tether.setRoom(0);
-			}
-			
-			if(tether.getPerson() == 0 && tether.getWeapon() == 0) {
-				confirmedCards++;
-			}
-		}
-	}*/
-		
-	
-	// getters/setters	
-	
-	/*public void enterSuggestion(int person, int weapon, int room, CardDeck playerSuggested, CardDeck playerAnswered) {
-		if(playerAnswered == null) {
-			playerAnswered = playerSuggested;
-		}
-		
-		CardDeck playerToAnswer = playerSuggested.nextPlayer();
-		while(playerToAnswer != playerAnswered) {
-			playerToAnswer.removeRoom(room);
-			playerToAnswer.removeWeapon(weapon);
-			playerToAnswer.removePerson(person);
-			playerToAnswer.updatetethers();
-			
-			if(playerToAnswer == MAXPLAYERS) {
-				playerToAnswer = 1;
-			} else {
-				playerToAnswer++;
-			}
-		}
-		
-		playerAnswered.createTether(person,weapon,room);
-		
-		if(playerAnswered == 0) {
-			return;
-		}
-		
-		
-		
-	}*/
 
 	public ArrayList<Integer> getDeck() {
 		return deck;
@@ -100,13 +43,8 @@ public class CardDeck {
 		this.deck = deck;
 	}
 
-	private void updatetethers() {
-		// TODO Auto-generated method stub
-		
-	};
-
 	public void initDeck() {
-		for (int i = 1; i <= 20; i++) {
+		for (int i = 1; i <= 21; i++) {
 			deck.add(i);
 		}
 	}

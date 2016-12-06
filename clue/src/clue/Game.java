@@ -9,6 +9,8 @@ class Game {
 	   
 	   ArrayList<Player> players = new ArrayList<Player>();
 	   CardDeck gameDeck = new CardDeck();
+	   ArrayList<Integer> solvedCards = new ArrayList<Integer>();
+	   
 	   
 	   Scanner reader = new Scanner(System.in);
 	   System.out.println("Enter amount of players: ");
@@ -45,25 +47,50 @@ class Game {
 	   while(solved == false) {
 		   System.out.println("Enter suggestion: ");
 		   String suggestion = reader.next();
+		   while(verifySuggestion(suggestion) == false) {
+			   System.out.println("Enter suggestion: ");
+			   suggestion = reader.next();
+		   };
 		   System.out.println("Who proposed the suggestion: ");
 		   int playerSuggested = reader.nextInt();
 		   System.out.println("Who answered the suggestion: ");
 		   int playerAnswered = reader.nextInt();
 		   System.out.println("playerAnswered: " + playerAnswered);
-		   enterSuggestion(players, suggestion, playerSuggested, playerAnswered);
-		   updateInformation(players, gameDeck);
-		   displayInformation(players, gameDeck);
-		   if(gameDeck.getDeck().size() == 3) {
+		   enterSuggestion(players, suggestion, playerSuggested, playerAnswered, solvedCards, gameDeck);
+		   updateInformation(players, gameDeck, solvedCards);
+		   displayInformation(players, gameDeck, solvedCards);
+		   if(gameDeck.getDeck().size() == 3 || solvedCards.size() == 3) {
 			   solved = true;
 		   }
 	   }
 	   
-	   System.out.println("Would you like to play again? (y/n) ");
-	   String playAgain = reader.next();	
-		
+	   System.out.println("the cards inside are: " + solvedCards);
+	   reader.close();
 	}
    
-   public static void enterSuggestion(ArrayList<Player> players, String suggestion, int playerSuggested, int playerAnswered) {
+   private static boolean verifySuggestion(String suggestion) {
+	   int person = Integer.parseInt(suggestion.split(",")[0]);
+	   int weapon = Integer.parseInt(suggestion.split(",")[1]);
+	   int room = Integer.parseInt(suggestion.split(",")[2]);
+	   
+	   if(person < 1 || person > 6) {
+		   System.out.println("Invalid Suggestion: person was entered incorrectly");
+		   return false;
+	   }
+	   if(weapon < 7 || weapon > 12) {
+		   System.out.println("Invalid Suggestion: weapon was entered incorrectly");
+		   return false;
+	   }
+	   if(room < 13 || room > 21) {
+		   System.out.println("Invalid Suggestion: room was entered incorrectly");
+		   return false;
+	   }
+	   
+	   return true;
+	   
+   }
+
+   public static void enterSuggestion(ArrayList<Player> players, String suggestion, int playerSuggested, int playerAnswered, ArrayList<Integer> solvedCards, CardDeck gameDeck ) {
 		
 	   // if no one can disprove the suggestion, eliminate it for everyone but the person asking
 	   if(playerAnswered == -1) {
@@ -71,7 +98,51 @@ class Game {
 			   if(currentPlayer.getId() == playerSuggested) continue;
 			   currentPlayer.getCardDeck().removeSuggestion(suggestion);
 		   }
-	   } 
+		   //if you solved the person weapon or room add it solve and eliminate everything else
+		   if(playerSuggested == 0) {
+			   System.out.println("made it here");
+			   int person = Integer.parseInt(suggestion.split(",")[0]);
+			   int weapon = Integer.parseInt(suggestion.split(",")[1]);
+			   int room = Integer.parseInt(suggestion.split(",")[2]);
+			   
+			   System.out.println("person: " + person);
+			   System.out.println("weapon: " + weapon);
+			   System.out.println("room: " + room);
+			   if(players.get(0).getConfirmedCards().contains(person) == false && solvedCards.contains(person) == false) {
+				   solvedCards.add(person);
+				   for (Player player : players) {
+					   for (int i = 1; i <= 6; i++) {
+						   if(i != person) {
+							   player.getCardDeck().removeCard(i);
+							   gameDeck.removeCard(i);
+						   }
+					   }
+				   }
+			   }
+			   if(players.get(0).getConfirmedCards().contains(weapon) == false && solvedCards.contains(weapon) == false) {
+				   solvedCards.add(weapon);
+				   for (Player player : players) {
+					   for (int i = 7; i <= 12; i++) {
+						   if(i != weapon) {
+							   player.getCardDeck().removeCard(i);
+							   gameDeck.removeCard(i);
+						   }
+					   }
+				   }
+			   }
+			   if(players.get(0).getConfirmedCards().contains(room) == false && solvedCards.contains(room) == false) {
+				   solvedCards.add(room);
+				   for (Player player : players) {
+					   for (int i = 13; i <= 21; i++) {
+						   if(i != room) {
+							   player.getCardDeck().removeCard(i);
+							   gameDeck.removeCard(i);
+						   }
+					   }
+				   }
+			   }
+		   }
+	   }
 	   //this means someone did answer it.
 	   else {
 		   //eliminate cards for all players who could not disprove it.
@@ -87,6 +158,7 @@ class Game {
 		   		System.out.println("What card were you shown: ");
 		   		int card = reader.nextInt();
 		   		players.get(playerAnswered).getConfirmedCards().add(card);
+		   		reader.close();
 		   	} 
 		   	// if someone else had the suggestion create a tether on the person they showed it to
 		   	else {
@@ -98,8 +170,14 @@ class Game {
 	   }
    }
    
-   public static void updateInformation(ArrayList<Player> players, CardDeck gameDeck) {
-	   //finds all cards that are already known
+   public static void updateInformation(ArrayList<Player> players, CardDeck gameDeck, ArrayList<Integer> solvedCards) {
+	
+	   //delete all solved cards from gamedeck options
+	   for (Integer solvedCard : solvedCards) {
+		   gameDeck.removeCard(solvedCard);
+	   }
+	   
+	   //finds all cards that are already known and eliminate them from the gameDeck
 	   ArrayList<Integer> cardsFound = new ArrayList<Integer>();
 	   for (Player player : players) {
 		   cardsFound.addAll(player.getConfirmedCards());
@@ -108,18 +186,10 @@ class Game {
 		   }
 	   }
 	   
-	   
 	   for (Player player : players) {
 		   //eliminates all the cards that are known from other player's cards
 		   for (Integer card : cardsFound) {
 			   if(player.getConfirmedCards().contains(card) == false) {
-				   /* DEBUG CODE
-				   System.out.println("");
-				   System.out.println("was false for player: " + player.getId());
-				   System.out.println("the deck of cards was" + player.getCardDeck());
-				   System.out.println("the confirmed cards looked like: " + player.getConfirmedCards());
-				   System.out.println("the card to match was: " + card);
-				   */
 				   player.getCardDeck().removeCard(card);
 			   }
 		   }
@@ -129,43 +199,22 @@ class Game {
 		   }
 	   }
 	   
+	   //simplify all tethers as much as possible
 	   for (Player player : players) {
-		   ArrayList<Integer> newTether = new ArrayList<Integer>();
-		   for (ArrayList<Integer> tether : player.getCardDeck().getTethers()) {
-			   for (int i = 0; i < tether.size(); i++) {
-				   if(player.getCardDeck().getDeck().contains(tether.get(i)) == false) tether.remove(i);
-			   }
-			   if(tether.size() == 1) {
-				   player.getConfirmedCards().add((tether.get(0)));
-			   }
-			   
-			   // if a card is known and is in the tether delete the tether
-			   for (int i = 0; i < tether.size(); i++) {
-				   if(player.getConfirmedCards().contains(tether.get(i))) {
-					   tether.clear();
-				   }
-			   }
-		   }
+		   player.solveTethers();
 	   }
 	   
-		   
-		   //eliminate all found cards from everyone elses deck
-		   //eliminate all other cards from someones deck if all their cards are found
-		   //
-		   //solve any tethers
-		   //
-		   //
-		   //
-		   //
-		   
-		   
-		   
-		   //System.out.println(player.getCardDeck().getDeck());
-		   //System.out.println(player.getCardDeck().getTethers());
+	   //re-eliminate gamedeck cards based on new information
+	   for (Player player : players) {
+		   for (Integer confirmedCard : player.getConfirmedCards()) {
+			   gameDeck.removeCard(confirmedCard);
+		   }
+	   }
    }
    
-   public static void displayInformation(ArrayList<Player> players, CardDeck gameDeck) {
-	   System.out.println("gamedeck" + gameDeck.getDeck());
+   public static void displayInformation(ArrayList<Player> players, CardDeck gameDeck, ArrayList<Integer> solvedCards) {
+	   System.out.println("gamedeck: " + gameDeck.getDeck());
+	   System.out.println("solvedCards: " + solvedCards);
 	   for (Player player : players) {
 		   System.out.println(player.getId() + ": " +  player.getCardDeck().getDeck());
 		   System.out.println(player.getCardDeck().getTethers());
@@ -180,6 +229,5 @@ class Game {
 		   return players.get(currentPlayer + 1);
 	   }  
    }
-   
    
 }
