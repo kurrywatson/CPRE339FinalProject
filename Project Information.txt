@@ -1,0 +1,10 @@
+One area where we implemented defensive programming was in our UI we only allow users to enter valid information while entering suggestions.  We also used defensive programming by using encapsulation by only allowing parts of the player class to be accessed through getters and setters.
+
+One area where we corrected bad code smells was how we had a class for each of the 3 categories (person, place, weapon) but there was not enough information stored in each of the classes to justify using them so we just made 1 class.  Another spot where we fixed bad code
+smells was by breaking up the game logic into multiple functions instead of having everything in the same while loop.
+
+We have multiple threads so that the user can have multiple games going on at one time. Every java swing window is it's own thread.
+
+One of the design patterns that we used was Encapsulation.  We used encapsulation with the Player Class.  When we first started we just manipulated the fields of the player class.  Then we used the encapsulation design pattern and made getters and setters for the fields.
+We also used the MVC pattern when dividing up our application.  The model is the CardDeck and Player classes, the view is the WelcomeUI, CardInput, and MainGameUI classes, the controller is the logic that was moved from our Game class and setup in our the MainGameUI class.
+The last design pattern that we used was the Observer pattern. We used this pattern when it is discovered that a player has a certain card all of the other players decks are updated to reflect that they cannot have that card.
